@@ -1,0 +1,24 @@
+<div id="<%= dom_id(message) %>" class="flex gap-3 <%= message.user? ? 'justify-end' : '' %>">
+  <% if message.assistant? %>
+    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm">🤖</div>
+  <% end %>
+
+  <div class="max-w-[80%] <%= message.user? ? 'bg-blue-600' : 'bg-gray-700' %> rounded-lg px-4 py-2">
+    <% if message.streaming? %>
+      <div class="flex items-center gap-2 text-gray-300">
+        <span class="animate-pulse">●</span>
+        <span>思考中...</span>
+      </div>
+    <% elsif message.failed? %>
+      <div class="text-red-400"><%= message.content %></div>
+    <% else %>
+      <div class="prose prose-invert prose-sm max-w-none">
+        <%= simple_format(message.content) %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if message.user? %>
+    <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm">👤</div>
+  <% end %>
+</div>

@@ -31,28 +31,33 @@
     <div class="flex-1 flex overflow-hidden">
       <!-- Messages area -->
       <div class="flex-1 flex flex-col">
-        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4">
-          <!-- Messages will be rendered here -->
-          <div class="text-center text-gray-500 py-8">
-            <p>开始和你的 AI 对话吧！</p>
-          </div>
+        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4" data-controller="messages">
+          <% if @messages.empty? %>
+            <div class="text-center text-gray-500 py-8" id="empty-state">
+              <p>开始和你的 AI 对话吧！</p>
+            </div>
+          <% else %>
+            <% @messages.each do |message| %>
+              <%= render message %>
+            <% end %>
+          <% end %>
         </div>
 
         <!-- Input area -->
         <div class="border-t border-gray-700 p-4">
-          <%= form_with url: "#", method: :post, class: "flex gap-3", data: { controller: "chat", action: "submit->chat#send" } do %>
+          <form id="chat-form" class="flex gap-3" data-controller="chat" data-action="submit->chat#send">
             <textarea
               name="content"
               rows="1"
-              placeholder="输入消息..."
+              placeholder="输入消息... (Enter 发送, Shift+Enter 换行)"
               class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               data-chat-target="input"
-              data-action="keydown->chat#handleKeydown"
+              data-action="keydown->chat#handleKeydown input->chat#autoResize"
             ></textarea>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition" data-chat-target="submit">
               发送
             </button>
-          <% end %>
+          </form>
         </div>
       </div>
 

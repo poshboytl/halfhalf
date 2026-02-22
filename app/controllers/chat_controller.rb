@@ -3,6 +3,6 @@ class ChatController < ApplicationController
 
   def index
     @gateway_config = current_user.gateway_configs.first
-    @messages = []
+    @messages = @gateway_config&.messages&.ordered || []
   end
 end

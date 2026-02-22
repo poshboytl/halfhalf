@@ -14,4 +14,7 @@ Rails.application.routes.draw do
 
   # Gateway config
   resources :gateway_configs, only: [:new, :create, :edit, :update, :destroy]
+
+  # Messages
+  resources :messages, only: [:create]
 end

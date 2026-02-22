@@ -1,5 +1,6 @@
 class GatewayConfig < ApplicationRecord
   belongs_to :user
+  has_many :messages, dependent: :destroy
   encrypts :api_token
 
   validates :name, presence: true

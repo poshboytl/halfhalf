@@ -2,10 +2,12 @@ require "net/http"
 require "json"
 
 class OpenclawClient
-  def initialize(gateway_config)
+  def initialize(gateway_config, session_key: nil)
     @endpoint = gateway_config.endpoint
     @token = gateway_config.api_token
     @uri = URI.parse(@endpoint)
+    # 用 gateway_config.id 作为默认 session key，确保同一个 gateway 配置的对话共享 session
+    @session_key = session_key || "halfhalf:gateway:#{gateway_config.id}"
   end
 
   def chat(messages:, stream: false, &block)
@@ -19,7 +21,8 @@ class OpenclawClient
     request.body = {
       model: "openclaw",
       stream: stream,
-      messages: messages
+      messages: messages,
+      user: @session_key  # 让 OpenClaw 保持 session
     }.to_json
 
     http = Net::HTTP.new(uri.host, uri.port)

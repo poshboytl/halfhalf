@@ -1,0 +1,45 @@
+<div class="min-h-full flex items-center justify-center py-12 px-4">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold">连接 OpenClaw Gateway</h1>
+      <p class="mt-2 text-gray-400">配置你的 OpenClaw 连接</p>
+    </div>
+
+    <%= form_with model: @gateway_config, url: gateway_configs_path, class: "mt-8 space-y-6" do |f| %>
+      <% if @gateway_config.errors.any? %>
+        <div class="bg-red-900/50 border border-red-500 rounded-lg p-4">
+          <ul class="list-disc list-inside text-red-300">
+            <% @gateway_config.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="space-y-4">
+        <div>
+          <label for="gateway_config_name" class="block text-sm font-medium text-gray-300">名称</label>
+          <%= f.text_field :name, value: "My OpenClaw", class: "mt-1 block w-full rounded-lg bg-gray-800 border-gray-700 text-white px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <label for="gateway_config_endpoint" class="block text-sm font-medium text-gray-300">Gateway URL</label>
+          <%= f.text_field :endpoint, placeholder: "http://localhost:4440", class: "mt-1 block w-full rounded-lg bg-gray-800 border-gray-700 text-white px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+          <p class="mt-1 text-xs text-gray-500">OpenClaw Gateway 的地址</p>
+        </div>
+
+        <div>
+          <label for="gateway_config_api_token" class="block text-sm font-medium text-gray-300">API Token</label>
+          <%= f.text_area :api_token, rows: 3, placeholder: "你的 Gateway Token", class: "mt-1 block w-full rounded-lg bg-gray-800 border-gray-700 text-white px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm" %>
+          <p class="mt-1 text-xs text-gray-500">在 OpenClaw 配置中找到</p>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">
+        连接
+      </button>
+    <% end %>
+
+    <%= link_to "← 返回", root_path, class: "block text-center text-gray-400 hover:text-white" %>
+  </div>
+</div>

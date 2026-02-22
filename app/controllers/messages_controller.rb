@@ -21,10 +21,15 @@ class MessagesController < ApplicationController
       status: :pending
     )
 
-    # Build conversation history
-    messages = @gateway_config.messages.ordered.map do |msg|
-      { role: msg.role, content: msg.content }
-    end.reject { |m| m[:content].blank? }
+    # Build conversation history with system prompt
+    messages = [
+      { role: "system", content: SystemPrompt.build }
+    ]
+    
+    @gateway_config.messages.ordered.each do |msg|
+      next if msg.content.blank?
+      messages << { role: msg.role, content: msg.content }
+    end
 
     # Stream response
     response.headers["Content-Type"] = "text/event-stream"

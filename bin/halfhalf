@@ -8,7 +8,7 @@ APP_ROOT = File.expand_path("..", __dir__)
 PLIST_PATH = File.expand_path("~/Library/LaunchAgents/com.halfhalf.server.plist")
 PID_FILE = File.join(APP_ROOT, "tmp/pids/server.pid")
 LOG_FILE = File.join(APP_ROOT, "log/production.log")
-PORT = ENV["HALFHALF_PORT"] || "3001"
+PORT = ENV["HALFHALF_PORT"] || "1314"
 
 def ensure_dirs
   FileUtils.mkdir_p(File.join(APP_ROOT, "tmp/pids"))
@@ -41,7 +41,7 @@ def plist_content
       <key>EnvironmentVariables</key>
       <dict>
         <key>PATH</key>
-        <string>/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <string>/Users/fiona/.rbenv/shims:/Users/fiona/.rbenv/bin:/opt/homebrew/opt/postgresql@17/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
         <key>RAILS_ENV</key>
         <string>production</string>
         <key>HALFHALF_PORT</key>

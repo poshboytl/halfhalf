@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "submit"]
+  static targets = ["input", "submit", "form", "messages"]
+  static values = { conversationId: Number }
 
   connect() {
     this.scrollToBottom()
@@ -47,7 +48,8 @@ export default class extends Controller {
 
     try {
       // Send request with SSE
-      const response = await fetch("/messages", {
+      const url = `/conversations/${this.conversationIdValue}/messages`
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -95,7 +97,7 @@ export default class extends Controller {
   }
 
   appendMessage(role, content, streaming = false) {
-    const messagesContainer = document.getElementById("messages")
+    const messagesContainer = this.messagesTarget
 
     const div = document.createElement("div")
     div.className = `flex gap-3 ${role === "user" ? "justify-end" : ""}`
@@ -148,7 +150,8 @@ export default class extends Controller {
   }
 
   scrollToBottom() {
-    const messagesContainer = document.getElementById("messages")
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
+    if (this.hasMessagesTarget) {
+      this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight
+    }
   }
 }

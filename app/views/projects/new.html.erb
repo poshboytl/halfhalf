@@ -1,0 +1,35 @@
+<div class="flex-1 flex items-center justify-center">
+  <div class="w-full max-w-md">
+    <h2 class="text-2xl font-bold text-white mb-6 text-center">New Project</h2>
+    
+    <%= form_with model: @project, class: "space-y-4" do |f| %>
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= f.text_field :name, 
+            placeholder: "e.g., funfou, halfhalf",
+            autofocus: true,
+            class: "w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      
+      <div>
+        <%= f.label :description, class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= f.text_area :description, 
+            placeholder: "What is this project about?",
+            rows: 3,
+            class: "w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" %>
+      </div>
+      
+      <div>
+        <%= f.label :workspace_path, "Workspace Path (optional)", class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= f.text_field :workspace_path, 
+            placeholder: "~/codes/myproject",
+            class: "w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="flex gap-3 pt-2">
+        <%= link_to "Cancel", :back, class: "flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-white text-center transition" %>
+        <%= f.submit "Create Project", class: "flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium cursor-pointer transition" %>
+      </div>
+    <% end %>
+  </div>
+</div>

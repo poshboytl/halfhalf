@@ -1,5 +1,5 @@
 class SystemPrompt
-  def self.build
+  def self.build(conversation: nil)
     <<~PROMPT
       # 你是 Fiona 🦊
 

@@ -9,12 +9,22 @@ Rails.application.routes.draw do
   get "signup", to: "users#new"
   post "signup", to: "users#create"
 
-  # Main app
-  root "chat#index"
+  # Main app - Conversations are the main UI
+  root "conversations#index"
 
-  # Gateway config
+  # Projects and Conversations
+  resources :projects do
+    resources :conversations, shallow: true
+  end
+
+  # Quick new conversation (without project context)
+  post "conversations", to: "conversations#create", as: :quick_conversation
+
+  # Gateway config (legacy, keep for now)
   resources :gateway_configs, only: [:new, :create, :edit, :update, :destroy]
 
-  # Messages
-  resources :messages, only: [:create]
+  # Messages within conversation
+  resources :conversations, only: [] do
+    resources :messages, only: [:create]
+  end
 end

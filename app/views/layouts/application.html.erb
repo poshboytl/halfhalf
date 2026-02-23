@@ -23,6 +23,18 @@
       </div>
     <% end %>
 
-    <%= yield %>
+    <% if logged_in? %>
+      <div class="flex h-full">
+        <!-- Sidebar -->
+        <%= render "layouts/sidebar" %>
+        
+        <!-- Main content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
+      <%= yield %>
+    <% end %>
   </body>
 </html>

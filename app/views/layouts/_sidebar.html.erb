@@ -1,0 +1,86 @@
+<aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col h-full">
+  <!-- Header -->
+  <div class="p-4 border-b border-gray-700">
+    <h1 class="text-lg font-semibold text-white flex items-center gap-2">
+      ☕ Half & Half
+    </h1>
+  </div>
+
+  <!-- New Conversation Button -->
+  <div class="p-3">
+    <%= link_to new_project_conversation_path(current_user.projects.first || Project.new), 
+        class: "w-full flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium transition",
+        data: { turbo_frame: "_top" } do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Conversation
+    <% end %>
+  </div>
+
+  <!-- Projects & Conversations -->
+  <nav class="flex-1 overflow-y-auto p-3 space-y-4" id="sidebar-nav">
+    <% current_user.projects.includes(:conversations).each do |project| %>
+      <div class="space-y-1">
+        <!-- Project Header -->
+        <div class="flex items-center justify-between group">
+          <%= link_to project_path(project), class: "flex-1 flex items-center gap-2 px-2 py-1 text-sm text-gray-400 hover:text-white rounded transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+            </svg>
+            <span class="font-medium"><%= project.name %></span>
+          <% end %>
+          <%= link_to new_project_conversation_path(project), class: "opacity-0 group-hover:opacity-100 p-1 text-gray-500 hover:text-white transition" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+          <% end %>
+        </div>
+
+        <!-- Conversations under this project -->
+        <div class="ml-4 space-y-0.5">
+          <% project.conversations.active.order(updated_at: :desc).limit(10).each do |conv| %>
+            <%= link_to conversation_path(conv), 
+                class: "block px-2 py-1.5 text-sm rounded transition #{ conv == @conversation ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }",
+                data: { turbo_frame: "_top" } do %>
+              <div class="truncate"><%= conv.title %></div>
+              <div class="text-xs text-gray-500"><%= time_ago_in_words(conv.updated_at) %> ago</div>
+            <% end %>
+          <% end %>
+          
+          <% if project.conversations.active.count > 10 %>
+            <%= link_to project_path(project), class: "block px-2 py-1 text-xs text-gray-500 hover:text-gray-400" do %>
+              Show all (<%= project.conversations.active.count %>)
+            <% end %>
+          <% end %>
+          
+          <% if project.conversations.active.empty? %>
+            <div class="px-2 py-1 text-xs text-gray-600 italic">No conversations</div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if current_user.projects.empty? %>
+      <div class="text-center py-8 text-gray-500">
+        <p class="text-sm">No projects yet</p>
+        <%= link_to "Create your first project", new_project_path, class: "text-blue-400 hover:text-blue-300 text-sm" %>
+      </div>
+    <% end %>
+  </nav>
+
+  <!-- Footer -->
+  <div class="p-3 border-t border-gray-700 space-y-2">
+    <%= link_to new_project_path, class: "flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-700 rounded transition" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Project
+    <% end %>
+    
+    <div class="flex items-center justify-between px-3 py-2 text-sm text-gray-500">
+      <span><%= current_user.email.split('@').first %></span>
+      <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-400 hover:text-white transition" %>
+    </div>
+  </div>
+</aside>

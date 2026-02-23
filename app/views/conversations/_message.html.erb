@@ -1,0 +1,40 @@
+<div class="flex gap-3 <%= message.user? ? 'justify-end' : '' %>" id="message-<%= message.id %>">
+  <% unless message.user? %>
+    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center flex-shrink-0">
+      <span class="text-white text-sm">🦊</span>
+    </div>
+  <% end %>
+  
+  <div class="max-w-2xl <%= message.user? ? 'bg-blue-600' : 'bg-gray-700' %> rounded-lg px-4 py-3">
+    <% if message.streaming? %>
+      <div class="flex items-center gap-2 text-gray-300">
+        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+        </svg>
+        <span>Thinking...</span>
+      </div>
+    <% elsif message.failed? %>
+      <div class="text-red-400">
+        <p><%= message.content.presence || "Failed to generate response" %></p>
+      </div>
+    <% else %>
+      <div class="prose prose-invert prose-sm max-w-none">
+        <%= simple_format(message.content) %>
+      </div>
+    <% end %>
+    
+    <div class="mt-2 text-xs text-gray-400 flex items-center gap-2">
+      <span><%= message.created_at.strftime("%H:%M") %></span>
+      <% if message.pending? || message.streaming? %>
+        <span class="animate-pulse">●</span>
+      <% end %>
+    </div>
+  </div>
+  
+  <% if message.user? %>
+    <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
+      <span class="text-white text-sm"><%= current_user.email.first.upcase %></span>
+    </div>
+  <% end %>
+</div>

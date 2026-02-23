@@ -8,6 +8,15 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      # 自动配置 Gateway（如果 OpenClaw 配置可用）
+      if OPENCLAW_CONFIG[:auto_discovered] && OPENCLAW_CONFIG[:token]
+        @user.gateway_configs.create!(
+          name: "Local Gateway",
+          endpoint: OPENCLAW_CONFIG[:endpoint],
+          api_token: OPENCLAW_CONFIG[:token]
+        )
+      end
+      
       session[:user_id] = @user.id
       redirect_to root_path, notice: "Welcome to Half & Half!"
     else

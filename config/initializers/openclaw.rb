@@ -3,12 +3,12 @@
 
 OPENCLAW_CONFIG = begin
   config_path = File.expand_path("~/.openclaw/openclaw.json")
-  
+
   if File.exist?(config_path)
     config = JSON.parse(File.read(config_path))
     port = config.dig("gateway", "port") || 18789
     token = config.dig("gateway", "auth", "token")
-    
+
     {
       endpoint: "http://127.0.0.1:#{port}",
       token: token,

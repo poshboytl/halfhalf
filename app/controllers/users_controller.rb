@@ -16,7 +16,7 @@ class UsersController < ApplicationController
           api_token: OPENCLAW_CONFIG[:token]
         )
       end
-      
+
       session[:user_id] = @user.id
       redirect_to root_path, notice: "Welcome to Half & Half!"
     else

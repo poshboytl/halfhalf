@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :require_login
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @projects = current_user.projects.includes(:conversations).order(:name)
@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_user.projects.build(project_params)
-    
+
     if @project.save
       redirect_to @project, notice: "Project created!"
     else

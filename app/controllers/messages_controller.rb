@@ -26,7 +26,7 @@ class MessagesController < ApplicationController
     messages = [
       { role: "system", content: SystemPrompt.build(conversation: @conversation) }
     ]
-    
+
     @conversation.messages.ordered.each do |msg|
       next if msg.content.blank?
       messages << { role: msg.role, content: msg.content }
@@ -54,7 +54,7 @@ class MessagesController < ApplicationController
 
       assistant_message.update!(status: :completed)
       response.stream.write("data: {\"done\": true, \"message_id\": #{assistant_message.id}}\n\n")
-      
+
       # Update conversation title if it's the first message
       if @conversation.title == "New Conversation" && user_message.content.present?
         new_title = user_message.content.truncate(50)

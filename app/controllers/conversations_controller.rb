@@ -1,14 +1,14 @@
 class ConversationsController < ApplicationController
   before_action :require_login
-  before_action :set_project, only: [:new, :create]
-  before_action :set_conversation, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [ :new, :create ]
+  before_action :set_conversation, only: [ :show, :edit, :update, :destroy ]
 
   def index
     # 首页：显示最近的对话或引导创建
     @recent_conversations = current_user.conversations.includes(:project)
                                        .order(updated_at: :desc)
                                        .limit(20)
-    
+
     # 如果有最近的对话，显示最新的一个
     if @recent_conversations.any?
       @conversation = @recent_conversations.first
@@ -31,7 +31,7 @@ class ConversationsController < ApplicationController
       @conversation = @project.conversations.build(conversation_params)
     else
       # Quick create: 使用默认项目或创建一个
-      default_project = current_user.projects.first || 
+      default_project = current_user.projects.first ||
                         current_user.projects.create!(name: "General")
       @conversation = default_project.conversations.build(conversation_params)
     end

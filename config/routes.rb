@@ -21,10 +21,10 @@ Rails.application.routes.draw do
   post "conversations", to: "conversations#create", as: :quick_conversation
 
   # Gateway config (legacy, keep for now)
-  resources :gateway_configs, only: [:new, :create, :edit, :update, :destroy]
+  resources :gateway_configs, only: [ :new, :create, :edit, :update, :destroy ]
 
   # Messages within conversation
   resources :conversations, only: [] do
-    resources :messages, only: [:create]
+    resources :messages, only: [ :create ]
   end
 end
